@@ -6,6 +6,7 @@ BaseCaching = __import__('base_caching').BaseCaching
 
 
 def copy_dict(items):
+    """copies a dictionary"""
     my_dict = {}
     for keys, values in items.items():
         my_dict[keys] = 0
