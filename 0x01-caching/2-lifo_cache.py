@@ -17,9 +17,8 @@ class LIFOCache(BaseCaching):
             discard = self.cache_data.pop(self.save_key)
             print("DISCARD: {}".format(self.save_key))
         if key and item is not None:
-            new_element = { key: item }
+            new_element = {key: item}
             self.cache_data.update(new_element)
-            #self.cache_data[key] = item
         self.save_key = key
 
     def get(self, key):
