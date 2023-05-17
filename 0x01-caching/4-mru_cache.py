@@ -20,21 +20,16 @@ class MRUCache(BaseCaching):
         """Instantiate both parent and child class"""
         super().__init__()
         self.my_dict = copy_dict(self.cache_data)
+        self.key = ""
 
     def put(self, key, item):
         """assign to the dictionary self.cache_data"""
         cache = self.cache_data
         if len(cache) == self.MAX_ITEMS and key not in cache:
-            least_assessed = 0
-            least_assessed_key = next(iter(self.cache_data))
-            for keys, values in self.my_dict.items():
-                if least_assessed <= values:
-                    least_assessed = values
-                    least_assessed_key = keys
-            print(self.my_dict)
-            discard = self.cache_data.pop(least_assessed_key)
-            self.my_dict.pop(least_assessed_key)
-            print("DISCARD: {}".format(least_assessed_key))
+            discard = self.cache_data.pop(self.key)
+            self.my_dict.pop(self.key)
+            print("DISCARD: {}".format(self.key))
+            self.key = key
         if key and item is not None:
             new_element = {key: item}
             self.my_dict.update({key: 0})
@@ -45,7 +40,7 @@ class MRUCache(BaseCaching):
         """return the value in self.cache_data linked to key"""
         try:
             self.my_dict[key] += 1
-            print(self.my_dict)
+            self.key = key
             return self.cache_data[key]
         except Exception as NotFount:
             return None
