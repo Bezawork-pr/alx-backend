@@ -4,6 +4,7 @@ Create a class LRUCache that inherits
 from BaseCaching and is a caching system"""
 BaseCaching = __import__('base_caching').BaseCaching
 
+
 def copy_dict(items):
     my_dict = {}
     for keys, values in items.items():
@@ -23,7 +24,8 @@ class LRUCache(BaseCaching):
 
         """assign to the dictionary self.cache_data"""
         print(self.my_dict)
-        if len(self.cache_data) == self.MAX_ITEMS and key not in self.cache_data:
+        if len(self.cache_data) == self.MAX_ITEMS
+        and key not in self.cache_data:
             self.my_dict.pop(self.save_key)
             least_assessed = 0
             least_assessed_key = next(iter(self.cache_data))
@@ -34,7 +36,7 @@ class LRUCache(BaseCaching):
             discard = self.cache_data.pop(least_assessed_key)
             print("DISCARD: {}".format(least_assessed_key))
         if key and item is not None:
-            new_element = { key: item }
+            new_element = {key: item}
             self.my_dict.update({key: 0})
             self.cache_data.update(new_element)
         self.save_key = key
