@@ -21,11 +21,9 @@ class LRUCache(BaseCaching):
         self.my_dict = copy_dict(self.cache_data)
 
     def put(self, key, item):
-
         """assign to the dictionary self.cache_data"""
-        print(self.my_dict)
-        if len(self.cache_data) == self.MAX_ITEMS
-        and key not in self.cache_data:
+        cache = self.cache_data
+        if len(cache) == self.MAX_ITEMS and key not in cache:
             self.my_dict.pop(self.save_key)
             least_assessed = 0
             least_assessed_key = next(iter(self.cache_data))
