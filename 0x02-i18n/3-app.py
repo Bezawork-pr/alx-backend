@@ -8,14 +8,6 @@ app = Flask(__name__)
 babel = Babel(app)
 
 
-def get_locale():
-    """ The decorated function is invoked
-    for each request to select a
-    language translation to
-    use for that request"""
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
 class Config(object):
     """To keep track of the list
     of supported languages"""
@@ -24,7 +16,6 @@ class Config(object):
     BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
-babel.init_app(app, locale_selector=get_locale)
 app.config.from_object(Config)
 
 
@@ -32,3 +23,12 @@ app.config.from_object(Config)
 def index():
     """Greet page visitors"""
     return render_template('2-index.html')
+
+
+@babel.localeselector
+def get_locale():
+    """ The decorated function is invoked
+    for each request to select a
+    language translation to
+    use for that request"""
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
