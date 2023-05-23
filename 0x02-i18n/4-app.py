@@ -8,6 +8,18 @@ app = Flask(__name__)
 babel = Babel(app)
 
 
+def get_locale():
+    """ The decorated function is invoked
+    for each request to select a
+    language translation to
+    use for that request"""
+    supported_langs = app.config['LANGUAGES']
+    local_lang = request.args.get('locale')
+    if local_lang in supported_langs:
+        return local_lang
+    return request.accept_languages.best_match(supported_langs)
+
+
 class Config(object):
     """To keep track of the list
     of supported languages"""
@@ -24,20 +36,3 @@ app.config.from_object(Config)
 def index():
     """Greet page visitors"""
     return render_template('4-index.html')
-
-
-@babel.localeselector
-def get_locale():
-    """ The decorated function is invoked
-    for each request to select a
-    language translation to
-    use for that request"""
-    supported_langs = app.config['LANGUAGES']
-    local_lang = request.args.get('locale')
-    if local_lang in supported_langs:
-        return local_lang
-    return request.accept_languages.best_match(supported_langs)
-
-
-if __name__ == "__main__":
-    app.run()
