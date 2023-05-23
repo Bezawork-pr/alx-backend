@@ -37,3 +37,7 @@ def get_locale():
     if local_lang in supported_langs:
         return local_lang
     return request.accept_languages.best_match(supported_langs)
+
+
+if __name__ == "__main__":
+    app.run()
