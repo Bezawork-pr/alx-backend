@@ -42,7 +42,7 @@ app.config.from_object(Config)
 @app.route('/')
 def index():
     """Greet page visitors"""
-    return render_template('4-index.html')
+    return render_template('5-index.html')
 
 def get_user():
     """Get user"""
@@ -56,4 +56,3 @@ def get_user():
 def before_request():
     """before_request"""
     g.user = get_user()
-    print(g.user["name"])
