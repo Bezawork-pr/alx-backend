@@ -2,6 +2,8 @@
 """Use flask_babel"""
 from flask_babel import Babel, gettext
 from flask import Flask, render_template, request, g
+import pytz
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -15,31 +17,6 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
-
-class Config(object):
-    """To keep track of the list
-    of supported languages"""
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "UTC"
-
-
-app.config.from_object(Config)
-
-
-@app.route('/')
-def index():
-    """Greet page visitors"""
-    user = get_user()
-    string = "."
-    if user is not None:
-        username = user['name'] + string
-    else:
-        username = None
-    return render_template('7-index.html', username=username)
-
-
-@babel.localeselector
 def get_locale():
     """ The decorated function is invoked
     for each request to select a
@@ -55,17 +32,43 @@ def get_locale():
     return request.accept_languages.best_match(supported_langs)
 
 
-@babel.timezoneselector
+
 def get_timezone():
     """Get timezone"""
-    print("Are u called")
     local_time_zone = request.args.get('timezone')
-    print(local_time_zone)
+    if local_time_zone is None:
+         return app.config['BABEL_DEFAULT_TIMEZONE']
     if local_time_zone in pytz.all_timezones:
         return local_time_zone
     else:
         raise pytz.exceptions.UnknownTimeZoneError
-    return app.config['BABEL_DEFAULT_TIMEZONE']
+
+
+class Config(object):
+    """To keep track of the list
+    of supported languages"""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
+
+
+babel.init_app(app, locale_selector=get_locale, timezone_selector=get_timezone)
+app.config.from_object(Config)
+
+
+@app.route('/')
+def index():
+    """Greet page visitors"""
+    user = get_user()
+    string = "."
+    time = get_timezone()
+    tz = pytz.timezone(time)
+    time = datetime.now(tz)
+    if user is not None:
+        username = user['name'] + string
+    else:
+        username = None
+    return render_template('8-index.html', username=username, time=time)
 
 
 def get_user():
@@ -73,9 +76,8 @@ def get_user():
     get_user = request.args.get('login_as')
     try:
         return users[int(get_user)]
-    except Exception as NotFound:
+    except:
         return None
-
 
 @app.before_request
 def before_request():
