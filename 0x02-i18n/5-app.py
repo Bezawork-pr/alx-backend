@@ -15,6 +15,27 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
+
+class Config(object):
+    """To keep track of the list
+    of supported languages"""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
+
+
+app.config.from_object(Config)
+
+
+@app.route('/')
+def index():
+    """Greet page visitors"""
+    user = get_user()
+    string = "."
+    return render_template('5-index.html', username=user['name'] + string)
+
+
+@babel.localeselector
 def get_locale():
     """ The decorated function is invoked
     for each request to select a
@@ -27,30 +48,14 @@ def get_locale():
     return request.accept_languages.best_match(supported_langs)
 
 
-class Config(object):
-    """To keep track of the list
-    of supported languages"""
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "UTC"
-
-
-babel.init_app(app, locale_selector=get_locale)
-app.config.from_object(Config)
-
-
-@app.route('/')
-def index():
-    """Greet page visitors"""
-    return render_template('5-index.html')
-
 def get_user():
     """Get user"""
     get_user = request.args.get('login_as')
     try:
-        return int(users[get_user])
-    except:
+        return users[int(get_user)]
+    except Exception as NoneFound:
         return None
+
 
 @app.before_request
 def before_request():
