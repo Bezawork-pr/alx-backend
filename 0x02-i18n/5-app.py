@@ -32,7 +32,11 @@ def index():
     """Greet page visitors"""
     user = get_user()
     string = "."
-    return render_template('5-index.html', username=user['name'] + string)
+    if user is not None:
+        username = user['name'] + string
+    else:
+        username = None
+    return render_template('5-index.html', username=username)
 
 
 @babel.localeselector
