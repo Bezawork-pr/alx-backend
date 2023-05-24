@@ -6,6 +6,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 babel = Babel(app)
+"""instantiate"""
 
 
 class Config(object):
@@ -17,6 +18,7 @@ class Config(object):
 
 
 app.config.from_object(Config)
+"""Use class Config for flask"""
 
 
 @app.route('/')
