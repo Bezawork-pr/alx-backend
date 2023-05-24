@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Use flask_babel"""
-from flask_babel import Babel, gettext
+from flask_babel import Babel, _
 from flask import Flask, render_template, request
 
 
