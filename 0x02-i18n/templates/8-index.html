@@ -5,7 +5,7 @@
 		<h1> {{ gettext('home_header') }} </h1>
 		{% if g.user %}
 		  {{ gettext('logged_in_as') }} {{ username }}
-		  {{ time }}
+		  <p> {{ gettext('current_time_is') }} {{ time }}</p>
 		{% else %}
 		<p> {{ gettext('not_logged_in') }}</p>
 		{% endif %}
