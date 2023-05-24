@@ -17,6 +17,7 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
+
 def get_locale():
     """ The decorated function is invoked
     for each request to select a
@@ -32,12 +33,11 @@ def get_locale():
     return request.accept_languages.best_match(supported_langs)
 
 
-
 def get_timezone():
     """Get timezone"""
     local_time_zone = request.args.get('timezone')
     if local_time_zone is None:
-         return app.config['BABEL_DEFAULT_TIMEZONE']
+        return app.config['BABEL_DEFAULT_TIMEZONE']
     if local_time_zone in pytz.all_timezones:
         return local_time_zone
     else:
@@ -76,8 +76,9 @@ def get_user():
     get_user = request.args.get('login_as')
     try:
         return users[int(get_user)]
-    except:
+    except Exeception as NotFound:
         return None
+
 
 @app.before_request
 def before_request():
