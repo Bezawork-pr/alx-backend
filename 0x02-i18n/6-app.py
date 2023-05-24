@@ -16,21 +16,6 @@ users = {
 }
 
 
-def get_locale():
-    """ The decorated function is invoked
-    for each request to select a
-    language translation to
-    use for that request"""
-    supported_langs = app.config['LANGUAGES']
-    local_lang = request.args.get('locale')
-    if local_lang in supported_langs:
-        return local_lang
-    elif g.user and g.user.get('locale')\
-            and g.user.get('locale') in supported_langs:
-        return g.user.get('locale')
-    return request.accept_languages.best_match(supported_langs)
-
-
 class Config(object):
     """To keep track of the list
     of supported languages"""
@@ -39,7 +24,6 @@ class Config(object):
     BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
-babel.init_app(app, locale_selector=get_locale)
 app.config.from_object(Config)
 
 
@@ -53,6 +37,22 @@ def index():
     else:
         username = None
     return render_template('6-index.html', username=username)
+
+
+@babel.localeselector
+def get_locale():
+    """ The decorated function is invoked
+    for each request to select a
+    language translation to
+    use for that request"""
+    supported_langs = app.config['LANGUAGES']
+    local_lang = request.args.get('locale')
+    if local_lang in supported_langs:
+        return local_lang
+    elif g.user and g.user.get('locale')\
+            and g.user.get('locale') in supported_langs:
+        return g.user.get('locale')
+    return request.accept_languages.best_match(supported_langs)
 
 
 def get_user():
